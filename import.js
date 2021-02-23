@@ -26,11 +26,13 @@ const importFile = (octokit, file, values) => {
         var milestoneIndex = cols.indexOf("milestone");
         var assigneeIndex = cols.indexOf("assignee");
         var stateIndex = cols.indexOf("state");
+        const commentsIndex = cols.indexOf("comments");
 
         if (titleIndex === -1) {
           console.error("Title required by GitHub, but not found in CSV.");
           process.exit(1);
         }
+
         const createPromises = csvRows.map((row) => {
           var sendObj = {
             owner: values.userOrOrganization,
@@ -58,7 +60,10 @@ const importFile = (octokit, file, values) => {
             sendObj.assignees = row[assigneeIndex].replace(/ /g, "").split(",");
           }
 
-          // console.log("sendObj", sendObj);
+          if (commentsIndex > -1 && row[commentsIndex] !== "") {
+            sendObj.comments = row[commentsIndex].split(",");
+          }
+
           let state = false;
           if (stateIndex > -1 && row[stateIndex] === "closed") {
             state = row[stateIndex];

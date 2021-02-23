@@ -50,7 +50,7 @@ program
           const labels = [];
 
           newRow.push(row[summaryIndex]);
-          newRow.push(J2M.toM(row[descriptionIndex]).replace(/\n/g, "<br/>"));
+          newRow.push(J2M.toM(row[descriptionIndex]));
 
           // Labels
           labels.push(options.team);
