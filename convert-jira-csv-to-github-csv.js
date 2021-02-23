@@ -53,7 +53,7 @@ program
           newRow.push(J2M.toM(row[descriptionIndex]).replace(/\n/g, "<br/>"));
 
           // Labels
-          labels.push(team);
+          labels.push(options.team);
           if (row[epicIndex]) labels.push(`Epic:${row[epicIndex]}`);
           if (row[issueTypeIndex] === "Epic" || row[issueTypeIndex] === "Bug") {
             labels.push(row[issueTypeIndex]);
