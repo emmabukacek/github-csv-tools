@@ -27,7 +27,6 @@ program
 
         const [cols, ...rows] = parsedCsv;
 
-        const teamLabel = `retail-${options.team}`
         const newColumns = ['title', 'body', 'labels', 'comments'];
 
         const descriptionIndex = cols.indexOf("Description"); // Body
@@ -54,7 +53,7 @@ program
           newRow.push(J2M.toM(row[descriptionIndex]).replace(/\n/g, "<br/>"));
 
           // Labels
-          labels.push(teamLabel);
+          labels.push(team);
           if (row[epicIndex]) labels.push(`Epic:${row[epicIndex]}`);
           if (row[issueTypeIndex] === "Epic" || row[issueTypeIndex] === "Bug") {
             labels.push(row[issueTypeIndex]);
