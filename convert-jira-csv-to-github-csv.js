@@ -3,6 +3,7 @@
 const program = require('commander');
 const J2M = require('J2M');
 const csv = require('csv');
+const fastcsv = require('fast-csv');
 const fs = require('fs');
 
 program
@@ -20,6 +21,7 @@ program
         console.error(err);
         process.exit(1);
       }
+
       csv.parse(data, {trim: true}, (err, parsedCsv) => {
         if (err) throw err;
 
@@ -49,7 +51,7 @@ program
           const labels = [];
 
           newRow.push(row[summaryIndex]);
-          newRow.push(J2M.toM(row[descriptionIndex]));
+          newRow.push(J2M.toM(row[descriptionIndex]).replace(/\n/g, "<br/>"));
 
           // Labels
           labels.push(teamLabel);
@@ -69,17 +71,19 @@ program
           // Comments
           newRow.push(commentsIndexes
             .filter(idx => row[idx])
-            .map(idx => J2M.toM(row[idx])));
+            .map(idx => J2M.toM(row[idx]).replace(/,/g, "")));
 
           return newRow;
         });
 
         result = [newColumns, ...parsedRows];
 
-        console.log(result);
+        const ws = fs.createWriteStream('out.csv');
+
+        fastcsv
+          .write(result, {headers: true})
+          .pipe(ws);
       });
     });
-
-    return result;
   })
   .parse(process.argv);
