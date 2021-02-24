@@ -1,5 +1,6 @@
 const csv = require("csv");
 const fs = require("fs");
+const bluebird = require('bluebird');
 
 const { createIssue } = require("./helpers.js");
 
@@ -33,7 +34,7 @@ const importFile = (octokit, file, values) => {
           process.exit(1);
         }
 
-        const createPromises = csvRows.map((row) => {
+        const createPromises = csvRows.slice(0,10).map(async (row) => {
           var sendObj = {
             owner: values.userOrOrganization,
             repo: values.repo,
@@ -68,7 +69,7 @@ const importFile = (octokit, file, values) => {
           if (stateIndex > -1 && row[stateIndex] === "closed") {
             state = row[stateIndex];
           }
-          return createIssue(octokit, sendObj, state);
+          return await createIssue(octokit, sendObj, state);
         });
 
         Promise.all(createPromises).then(
