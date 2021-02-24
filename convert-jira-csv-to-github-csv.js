@@ -65,7 +65,7 @@ program
 
           labelIndexes.forEach(idx => row[idx] && labels.push(row[idx]));
 
-          newRow.push(labels);
+          newRow.push(labels.map(label => label.slice(0,50)));
 
           // Comments
           newRow.push(commentsIndexes
