@@ -1,6 +1,5 @@
 const csv = require("csv");
 const fs = require("fs");
-const bluebird = require('bluebird');
 
 const { createIssue } = require("./helpers.js");
 
@@ -17,16 +16,16 @@ const importFile = (octokit, file, values) => {
       },
       (err, csvRows) => {
         if (err) throw err;
-        var cols = csvRows[0].map(col => col.toLowerCase());
+        const cols = csvRows[0].map(col => col.toLowerCase());
         csvRows.shift();
 
         // get indexes of the fields we need
-        var titleIndex = cols.indexOf("title");
-        var bodyIndex = cols.indexOf("body");
-        var labelsIndex = cols.indexOf("labels");
-        var milestoneIndex = cols.indexOf("milestone");
-        var assigneeIndex = cols.indexOf("assignee");
-        var stateIndex = cols.indexOf("state");
+        const titleIndex = cols.indexOf("title");
+        const bodyIndex = cols.indexOf("body");
+        const labelsIndex = cols.indexOf("labels");
+        const milestoneIndex = cols.indexOf("milestone");
+        const assigneeIndex = cols.indexOf("assignee");
+        const stateIndex = cols.indexOf("state");
         const commentsIndex = cols.indexOf("comments");
 
         if (titleIndex === -1) {
@@ -34,8 +33,8 @@ const importFile = (octokit, file, values) => {
           process.exit(1);
         }
 
-        const createPromises = csvRows.slice(0,10).map(async (row) => {
-          var sendObj = {
+        const createPromises = csvRows.map(async (row) => {
+          const sendObj = {
             owner: values.userOrOrganization,
             repo: values.repo,
             title: row[titleIndex],
